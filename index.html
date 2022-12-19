@@ -1,11 +1,120 @@
-- 👋 Hi, I’m @ganada9
-- 👀 I’m interested in ...
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
-
-<!---
-ganada9/ganada9 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
 <!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="꼬맨틀 - 단어 유사도 추측 게임 - 뉴스젤리 : 데이터 시각화 전문 기업">
+    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:image" content="{{ request.host_url }}assets/og_image.png">
+    <meta property="og:description" content="하루에 한 번, 오늘의 단어를 맞춰보세요. 단어를 입력하면 정답 단어와의 유사도를 보여줍니다.">
+
+    <title>꼬맨틀테스트 - 단어 유사도 추측 게임 - 뉴스젤리 : 데이터 시각화 전문 기업</title>
+    <link rel="stylesheet" href="/assets/css/modern-normalize.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=20221209">
+    <script src="/assets/js/clipboard.js"></script>
+
+    <link rel="icon" href="/assets/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/manifest.webmanifest">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y0ED7GGKGN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Y0ED7GGKGN');
+    </script>
+
+    <!--
+    Copyright (c) 2022, Newsjelly, forked from Semantlich by Johannes Gätjen semantlich.johannesgaetjen.de and Semantle by David Turner <novalis@novalis.org> semantle.novalis.org
+
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+    -->
+</head>
+<body>
+<!-- include script here so that we can set dark mode of body on initialization -->
+<script src="/assets/js/semantle.js?v=20221209"></script>
+<a class="banner" href="https://newsjel.ly/" target="_blank">
+    <img src="/assets/icon.svg" alt="뉴스젤리 로고">
+    <span>데이터 활용에 가치를 더하는 데이터 시각화, <b>NEWSJELLY</b></span>
+</a>
+<div class="container">
+    <header>
+        <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
+        <nav id="menu">
+            <button aria-label="Settings" class="overlay-button" id="settings-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- https://tabler-icons.io/ -->
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
+        </nav>
+    </header>
+    <div class="dialog-underlay" id="settings-underlay">
+        <div class="dialog" id="settings" aria-labelledby="settings-heading" aria-modal="true" role="dialog">
+            <button class="dialog-close" id="settings-close" aria-label="Schließen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="dialog-content" id="settings-content">
+                <h3 id="settings-heading">설정</h3>
+                <div>
+                    <input type="checkbox" name="dark-mode" value="dark-mode" id="dark-mode"/>
+                    <label for="dark-mode">다크 모드</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="share-guesses" value="share-guesses" id="share-guesses"/>
+                    <label for="share-guesses">결과 공유 텍스트에 추측 횟수 표시하기</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="share-time" value="share-time" id="share-time"/>
+                    <label for="share-time">결과 공유 텍스트에 걸린 시간 표시하기</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="share-top-guess" value="share-top-guess" id="share-top-guess"/>
+                    <label for="share-top-guess">결과 공유 텍스트에 최대 유사도 표시하기</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p id="similarity-story"></p>
+    <div id="error" style="color:#ff0000"></div>
+    <form id="form" autocorrect="off" autocapitalize="none"
+        autocomplete="off">
+        <div id="form-row">
+            <div id="guess-wrapper">
+                <input type="text" id="dummy" style="position: absolute; width: 0; height: 0; opacity: 0;">
+                <input placeholder="추측할 단어를 입력하세요" autocorrect="off" autocapitalize="none"
+                    autocomplete="off"
+                    type="text" id="guess">
+                <input type="submit" value="추측하기" id="guess-btn" class="button">
+            </div>
+        </div>
+    </form>
+    <div id="response"></div>
+    <div style="display:none">
+        <input type="text" id="share"/>
+    </div>
+    <table id="guesses">
+    </table>
+
+    <input type="button" value="포기하기" id="give-up-btn" class="button">
+
+
+</div>
+</body>
+</html>
